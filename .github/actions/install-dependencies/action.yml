@@ -1,0 +1,17 @@
+name: Install dependencies
+description: Install Node, and project dependencies.
+
+runs:
+  using: "composite"
+  steps:
+    - uses: pnpm/action-setup@v3
+      with:
+        version: latest
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+
+    - name: Install Node Packages, Deps
+      shell: bash
+      run: npm ci
