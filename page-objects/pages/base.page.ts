@@ -31,7 +31,7 @@ export abstract class BasePage {
   async openMobileAppBoard(): Promise<void> {
     await this.navMenu.mobileAppProject.click();
   }
-  
+
   async openMarketingBoard(): Promise<void> {
     await this.navMenu.marketingCampProject.click();
   }
