@@ -6,6 +6,10 @@ This project demonstrates a Playwright-driven test suite for testing a Kanban bo
 
 ## Setup
 
+If you only want to see the run results - you can download playwright-report file from the last workflow summary page on "Actions" tab
+
+Otherwise proceed with local run
+
 ### Prerequisites
 
 - Install Node.js (v20 or higher recommended)
@@ -21,15 +25,6 @@ npm install
 npx playwright install
 ```
 ## Test run
-
-To execute tests - set up environment variables. Create .env in the root folder and save admin username and password
-
-Example .env:
-
-```
-ADMIN_USER=admin_username
-ADMIN_USER_PASSWORD=admin_username
-```
 
 #### To run tests
 
