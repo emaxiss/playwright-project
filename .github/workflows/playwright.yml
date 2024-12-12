@@ -1,0 +1,36 @@
+name: Playwright Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  playwright-tests:
+    runs-on: ubuntu-latest
+    env: 
+      ADMIN_USER: ${{ secrets.ADMIN_USER }} 
+      ADMIN_USER_PASSWORD: ${{ secrets.ADMIN_USER_PASSWORD }} 
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install-dependencies
+
+      - name: Cache Playwright Binaries
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-Playwright-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npx playwright install --with-deps
+
+      - name: Run Tests
+        run: npm run test
+
+      - name: Upload Report to Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 5
