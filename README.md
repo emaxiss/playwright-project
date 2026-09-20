@@ -1,5 +1,7 @@
 # Playwright Project
 
+[![Playwright Tests](https://github.com/emaxiss/playwright-project/actions/workflows/playwright.yml/badge.svg)](https://github.com/emaxiss/playwright-project/actions/workflows/playwright.yml)
+
 A Playwright test suite and the Kanban board application it exercises.
 
 ## About
@@ -31,6 +33,8 @@ force failures or seed a known board per test.
   rather than repeated test bodies.
 - **Isolation.** Tests that mutate the board seed their own state, so they stay
   independent under parallel execution.
+- **Sharded CI.** The suite runs as three shards in parallel and a final job
+  merges the blob reports into one HTML report.
 
 ## Setup
 
@@ -75,8 +79,9 @@ screen; `ADMIN_USER` and `ADMIN_USER_PASSWORD` override it.
 | Filtering       | Title search, tag filter, combined tags, sort by title and priority      |
 | Drag and drop   | Move between columns, drop on origin, drop into empty column             |
 | Error handling  | Failed board request, missing board, empty board, expired session        |
+| Keyboard access | Open by keyboard, focus trapped in both modals, nested Escape, inert     |
 
-38 tests per browser including the sign in setup, 112 across chromium,
+43 tests per browser including the sign in setup, 127 across chromium,
 firefox and webkit.
 
 ## Layout
@@ -88,3 +93,13 @@ app/             application under test (Vite, React)
 page-objects/    page objects, components and fixtures
 tests/           specs
 ```
+
+## Continuous integration
+
+Every push to `main` and every pull request runs typecheck, a Prettier check,
+and the suite split across three parallel shards. Each shard uploads a blob
+report and a final job merges them into a single HTML report, downloadable from
+the run summary on the Actions tab.
+
+The lockfile is written by npm 11, which records optional platform packages
+that npm 10 rejects, so the workflow pins npm to match.
