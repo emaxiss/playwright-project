@@ -55,6 +55,12 @@ export function App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const toastId = useRef(0);
 
+  /** Lets async callbacks tell whether the user has since switched boards. */
+  const boardIdRef = useRef(boardId);
+  useEffect(() => {
+    boardIdRef.current = boardId;
+  }, [boardId]);
+
   const pushToast = useCallback(
     (
       text: string,
@@ -90,6 +96,11 @@ export function App() {
     setLoading(true);
     try {
       const response = await request(`/api/boards/${boardId}`);
+      if (response.status === 401) {
+        localStorage.removeItem(SESSION_KEY);
+        setSession(null);
+        return;
+      }
       if (!response.ok) throw new Error("Unable to load board");
       setBoard(await response.json());
       setError("");
@@ -122,6 +133,16 @@ export function App() {
     localStorage.removeItem(SESSION_KEY);
     setSession(null);
     setBoard(null);
+  }
+
+  function selectBoard(id: string) {
+    if (id === boardId) return;
+    setBoardId(id);
+    setSearch("");
+    setActiveTags([]);
+    setPanelOpen(false);
+    setPanelTask(null);
+    setPendingDelete(null);
   }
 
   async function saveTask(draft: TaskDraft) {
@@ -164,12 +185,13 @@ export function App() {
     }
     await loadBoard();
 
+    const deletedFrom = boardId;
     pushToast(`Deleted "${task.title}"`, "success", async () => {
-      await request(`/api/boards/${boardId}`, {
+      await request(`/api/boards/${deletedFrom}`, {
         method: "POST",
         body: JSON.stringify(task),
       });
-      await loadBoard();
+      if (deletedFrom === boardIdRef.current) await loadBoard();
     });
   }
 
@@ -231,7 +253,7 @@ export function App() {
               type="button"
               className="tab"
               aria-current={id === boardId}
-              onClick={() => setBoardId(id)}
+              onClick={() => selectBoard(id)}
             >
               {label}
             </button>
