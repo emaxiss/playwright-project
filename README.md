@@ -5,9 +5,10 @@ A Playwright test suite and the Kanban board application it exercises.
 ## About
 
 The repository contains both the application under test and the suite that
-covers it. The application is a small Vite and React board with four columns,
-task creation and deletion, drag and drop between columns, title filtering and
-a JSON API served as Vite middleware.
+covers it. The application is a Vite and React board with a sign in gate, four
+columns, a task detail panel for creating and editing, drag and drop, search,
+tag filters, sorting, delete confirmation with undo, and a JSON API served as
+Vite middleware.
 
 Keeping the application in the repository means the suite owns its target. It
 boots with the tests, needs no credentials, and its API can be intercepted to
@@ -24,6 +25,8 @@ force failures or seed a known board per test.
 - **Role based locators.** Columns are named regions and cards are named
   articles, so the suite selects by role and accessible name rather than by
   class names or DOM position.
+- **Stored session.** A setup project signs in once and saves the session, which
+  the browser projects reuse through storageState instead of signing in per test.
 - **Data driven cases.** Board display assertions run from a table of cases
   rather than repeated test bodies.
 - **Isolation.** Tests that mutate the board seed their own state, so they stay
@@ -47,7 +50,8 @@ npx playwright install
 ```
 
 No environment configuration is required. The test run starts the application
-automatically.
+automatically. The demo account is `admin` / `password123`, shown on the sign in
+screen; `ADMIN_USER` and `ADMIN_USER_PASSWORD` override it.
 
 ## Test run
 
@@ -62,12 +66,16 @@ automatically.
 
 ## Coverage
 
-| Area            | Cases                                                                 |
-| --------------- | --------------------------------------------------------------------- |
-| Board display   | Task placement and tags across boards, board switching, empty columns |
-| Task management | Create, validation failure, delete, filter by title                   |
-| Drag and drop   | Move between columns, drop on origin, drop into empty column          |
-| Error handling  | Failed board request, missing board, empty board                      |
+| Area            | Cases                                                                    |
+| --------------- | ------------------------------------------------------------------------ |
+| Authentication  | Valid sign in, invalid username, invalid password, board gated, sign out |
+| Board display   | Task placement, tags and assignee, board switching, empty columns        |
+| Task management | Create, validation failure, edit, cancel, confirm delete, undo delete    |
+| Filtering       | Title search, tag filter, combined tags, sort by title and priority      |
+| Drag and drop   | Move between columns, drop on origin, drop into empty column             |
+| Error handling  | Failed board request, missing board, empty board                         |
+
+32 tests per browser, 94 across chromium, firefox and webkit.
 
 ## Layout
 
