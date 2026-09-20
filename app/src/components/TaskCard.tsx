@@ -26,6 +26,13 @@ export function TaskCard({
       onDragStart={() => onDragStart(task.id)}
       onDragEnd={onDragEnd}
       onClick={() => onOpen(task)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onOpen(task);
+        }
+      }}
+      tabIndex={0}
       aria-label={task.title}
       data-task-id={task.id}
     >
