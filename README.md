@@ -69,13 +69,15 @@ screen; `ADMIN_USER` and `ADMIN_USER_PASSWORD` override it.
 | Area            | Cases                                                                    |
 | --------------- | ------------------------------------------------------------------------ |
 | Authentication  | Valid sign in, invalid username, invalid password, board gated, sign out |
-| Board display   | Task placement, tags and assignee, board switching, empty columns        |
+| Board display   | Task placement, tags and assignee, column counts, empty columns          |
+| Board switching | Switching boards, clearing an active search, closing an open panel       |
 | Task management | Create, validation failure, edit, cancel, confirm delete, undo delete    |
 | Filtering       | Title search, tag filter, combined tags, sort by title and priority      |
 | Drag and drop   | Move between columns, drop on origin, drop into empty column             |
-| Error handling  | Failed board request, missing board, empty board                         |
+| Error handling  | Failed board request, missing board, empty board, expired session        |
 
-32 tests per browser, 94 across chromium, firefox and webkit.
+38 tests per browser including the sign in setup, 112 across chromium,
+firefox and webkit.
 
 ## Layout
 
