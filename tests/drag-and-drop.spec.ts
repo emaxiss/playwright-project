@@ -32,6 +32,7 @@ test.describe("Drag and drop", () => {
     ).toBeHidden();
     await expect(inProgress.count).toHaveText("2");
     await expect(todo.count).toHaveText("1");
+    await expect(kanbanPage.toast).toContainText("Moved to In Progress");
   });
 
   test("keeps the task in place when dropped on its own column", async ({

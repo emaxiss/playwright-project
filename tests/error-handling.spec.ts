@@ -9,8 +9,8 @@ test.describe("Error handling", () => {
     await failBoardRequest(500);
     await kanbanPage.open();
 
-    await expect(kanbanPage.errorMessage).toBeVisible();
-    await expect(kanbanPage.errorMessage).toHaveText("Unable to load board");
+    await expect(kanbanPage.errorBanner).toBeVisible();
+    await expect(kanbanPage.errorBanner).toContainText("Unable to load board");
   });
 
   test("shows an error when the board is missing", async ({
@@ -20,7 +20,7 @@ test.describe("Error handling", () => {
     await failBoardRequest(404);
     await kanbanPage.open();
 
-    await expect(kanbanPage.errorMessage).toHaveText("Unable to load board");
+    await expect(kanbanPage.errorBanner).toContainText("Unable to load board");
   });
 
   test("renders an empty board without errors", async ({
@@ -30,7 +30,7 @@ test.describe("Error handling", () => {
     await seedBoard([]);
     await kanbanPage.open();
 
-    await expect(kanbanPage.errorMessage).toBeHidden();
+    await expect(kanbanPage.errorBanner).toBeHidden();
     for (const status of Object.values(ColumnStatus)) {
       await expect(
         kanbanPage.getColumnByStatus(status).emptyMessage,
