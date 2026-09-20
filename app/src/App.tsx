@@ -47,6 +47,7 @@ export function App() {
 
   const [panelTask, setPanelTask] = useState<Task | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
+
   const [pendingDelete, setPendingDelete] = useState<Task | null>(null);
 
   const [draggedId, setDraggedId] = useState<string | null>(null);
@@ -236,101 +237,112 @@ export function App() {
       return 0;
     });
 
+  const modalOpen = panelOpen || pendingDelete !== null;
+
+  function closePanel() {
+    setPanelOpen(false);
+    setPanelTask(null);
+  }
+
   return (
     <div className="shell">
-      <header className="topbar">
-        <span className="brand">
-          <span className="brand-mark" aria-hidden="true">
-            K
+      {/* the board is inert while a modal is open so tab and screen readers
+          cannot reach content the dialog claims is unavailable */}
+      <div className="shell-content" inert={modalOpen || undefined}>
+        <header className="topbar">
+          <span className="brand">
+            <span className="brand-mark" aria-hidden="true">
+              K
+            </span>
+            Kanban
           </span>
-          Kanban
-        </span>
 
-        <nav className="tabs" aria-label="Boards">
-          {BOARDS.map(({ id, label }) => (
-            <button
-              key={id}
-              type="button"
-              className="tab"
-              aria-current={id === boardId}
-              onClick={() => selectBoard(id)}
-            >
-              {label}
-            </button>
-          ))}
-        </nav>
+          <nav className="tabs" aria-label="Boards">
+            {BOARDS.map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                className="tab"
+                aria-current={id === boardId}
+                onClick={() => selectBoard(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
 
-        <div className="topbar-spacer" />
+          <div className="topbar-spacer" />
 
-        <span className="user-chip">
-          <span className="avatar" aria-hidden="true">
-            {initials(session.user.name)}
+          <span className="user-chip">
+            <span className="avatar" aria-hidden="true">
+              {initials(session.user.name)}
+            </span>
+            {session.user.name}
           </span>
-          {session.user.name}
-        </span>
-        <button
-          type="button"
-          className="btn btn-secondary btn-sm"
-          onClick={signOut}
-        >
-          Logout
-        </button>
-      </header>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            onClick={signOut}
+          >
+            Logout
+          </button>
+        </header>
 
-      <main className="workspace">
-        <div className="board-head">
-          <div>
-            <h1>{board?.name ?? "Board"}</h1>
-            <p>{board?.description}</p>
+        <main className="workspace">
+          <div className="board-head">
+            <div>
+              <h1>{board?.name ?? "Board"}</h1>
+              <p>{board?.description}</p>
+            </div>
           </div>
-        </div>
 
-        <Toolbar
-          search={search}
-          activeTags={activeTags}
-          sort={sort}
-          onSearch={setSearch}
-          onToggleTag={(tag) =>
-            setActiveTags((current) =>
-              current.includes(tag)
-                ? current.filter((item) => item !== tag)
-                : [...current, tag],
-            )
-          }
-          onSort={setSort}
-          onNewTask={() => {
-            setPanelTask(null);
-            setPanelOpen(true);
-          }}
-        />
+          <Toolbar
+            search={search}
+            activeTags={activeTags}
+            sort={sort}
+            onSearch={setSearch}
+            onToggleTag={(tag) =>
+              setActiveTags((current) =>
+                current.includes(tag)
+                  ? current.filter((item) => item !== tag)
+                  : [...current, tag],
+              )
+            }
+            onSort={setSort}
+            onNewTask={() => {
+              setPanelTask(null);
+              setPanelOpen(true);
+            }}
+          />
 
-        {error && <ErrorBanner message={error} />}
+          {error && <ErrorBanner message={error} />}
 
-        <div className="columns">
-          {COLUMN_STATUSES.map((status) => (
-            <Column
-              key={status}
-              status={status}
-              tasks={visible.filter((task) => task.status === status)}
-              loading={loading}
-              draggedId={draggedId}
-              isDropTarget={dropTarget === status}
-              onOpen={(task) => {
-                setPanelTask(task);
-                setPanelOpen(true);
-              }}
-              onRequestDelete={setPendingDelete}
-              onDragStart={setDraggedId}
-              onDragEnd={() => {
-                setDraggedId(null);
-                setDropTarget(null);
-              }}
-              onDragOverColumn={setDropTarget}
-              onDrop={moveTask}
-            />
-          ))}
-        </div>
-      </main>
+          <div className="columns">
+            {COLUMN_STATUSES.map((status) => (
+              <Column
+                key={status}
+                status={status}
+                tasks={visible.filter((task) => task.status === status)}
+                loading={loading}
+                draggedId={draggedId}
+                isDropTarget={dropTarget === status}
+                onOpen={(task) => {
+                  setPanelTask(task);
+                  setPanelOpen(true);
+                }}
+                onRequestDelete={setPendingDelete}
+                onDragStart={setDraggedId}
+                onDragEnd={() => {
+                  setDraggedId(null);
+                  setDropTarget(null);
+                }}
+                onDragOverColumn={setDropTarget}
+                onDrop={moveTask}
+              />
+            ))}
+          </div>
+        </main>
+      </div>
 
       {panelOpen && (
         <TaskPanel
@@ -338,10 +350,7 @@ export function App() {
           task={panelTask}
           onSave={saveTask}
           onRequestDelete={setPendingDelete}
-          onClose={() => {
-            setPanelOpen(false);
-            setPanelTask(null);
-          }}
+          onClose={closePanel}
         />
       )}
 

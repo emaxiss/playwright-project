@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useFocusTrap } from "../useFocusTrap";
 import type { ColumnStatus, Tag, Task } from "../types";
 import { AVAILABLE_TAGS, COLUMN_STATUSES } from "../types";
 import { AlertIcon, CloseIcon } from "./Icons";
@@ -41,13 +42,7 @@ export function TaskPanel({
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  const panelRef = useFocusTrap<HTMLElement>(onClose);
 
   function toggleTag(tag: Tag) {
     setTags((current) =>
@@ -80,6 +75,7 @@ export function TaskPanel({
     <>
       <div className="panel-scrim" onClick={onClose} />
       <aside
+        ref={panelRef}
         className="panel"
         role="dialog"
         aria-modal="true"

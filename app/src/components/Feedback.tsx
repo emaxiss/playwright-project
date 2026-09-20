@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
 import { AlertIcon, CloseIcon } from "./Icons";
+import { useFocusTrap } from "../useFocusTrap";
 
 export interface Toast {
   id: number;
@@ -60,20 +60,12 @@ export function ConfirmDialog({
   onConfirm: () => void;
   onCancel: () => void;
 }) {
-  const confirmRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    confirmRef.current?.focus();
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onCancel();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onCancel]);
+  const dialogRef = useFocusTrap<HTMLDivElement>(onCancel);
 
   return (
     <div className="dialog-scrim" onClick={onCancel}>
       <div
+        ref={dialogRef}
         className="dialog"
         role="alertdialog"
         aria-modal="true"
@@ -90,12 +82,7 @@ export function ConfirmDialog({
           >
             Cancel
           </button>
-          <button
-            ref={confirmRef}
-            type="button"
-            className="btn btn-danger"
-            onClick={onConfirm}
-          >
+          <button type="button" className="btn btn-danger" onClick={onConfirm}>
             {confirmLabel}
           </button>
         </div>
