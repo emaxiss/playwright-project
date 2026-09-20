@@ -29,7 +29,13 @@ npm install
 
 # install playwright browsers
 npx playwright install
+
+# set credentials for the application under test
+cp .env.example .env
 ```
+
+Fill in `ADMIN_USER` and `ADMIN_USER_PASSWORD` in `.env`. The suite fails with an
+explicit error if either is missing.
 
 ## Test run
 
