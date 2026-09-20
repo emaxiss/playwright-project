@@ -1,0 +1,93 @@
+{
+  "web": {
+    "id": "web",
+    "name": "Web Application",
+    "description": "Main web application development board",
+    "tasks": [
+      {
+        "id": "web-1",
+        "title": "Implement user authentication",
+        "description": "Add login and registration flows with session handling.",
+        "status": "To Do",
+        "tags": ["Feature", "High Priority"]
+      },
+      {
+        "id": "web-2",
+        "title": "Fix navigation bug",
+        "description": "Sidebar collapses unexpectedly on route change.",
+        "status": "To Do",
+        "tags": ["Bug"]
+      },
+      {
+        "id": "web-3",
+        "title": "Design system updates",
+        "description": "Align spacing tokens across shared components.",
+        "status": "In Progress",
+        "tags": ["Design"]
+      },
+      {
+        "id": "web-4",
+        "title": "API integration",
+        "description": "Wire the board view to the tasks endpoint.",
+        "status": "Review",
+        "tags": ["Feature"]
+      },
+      {
+        "id": "web-5",
+        "title": "Update documentation",
+        "description": "Document the release process for contributors.",
+        "status": "Done",
+        "tags": ["Feature"]
+      }
+    ]
+  },
+  "mobile": {
+    "id": "mobile",
+    "name": "Mobile Application",
+    "description": "Native mobile application board",
+    "tasks": [
+      {
+        "id": "mobile-1",
+        "title": "Push notification system",
+        "description": "Deliver task assignment notifications to devices.",
+        "status": "To Do",
+        "tags": ["Feature"]
+      },
+      {
+        "id": "mobile-2",
+        "title": "Offline mode",
+        "description": "Cache the active board for offline viewing.",
+        "status": "In Progress",
+        "tags": ["Feature", "High Priority"]
+      },
+      {
+        "id": "mobile-3",
+        "title": "App icon design",
+        "description": "Produce icon variants for both platforms.",
+        "status": "Done",
+        "tags": ["Design"]
+      }
+    ]
+  },
+  "marketing": {
+    "id": "marketing",
+    "name": "Marketing Campaign",
+    "description": "Campaign planning and content board",
+    "tasks": [
+      {
+        "id": "marketing-1",
+        "title": "Q2 campaign brief",
+        "description": "Draft the brief for the spring campaign.",
+        "status": "To Do",
+        "tags": ["Feature"]
+      },
+      {
+        "id": "marketing-2",
+        "title": "Landing page copy",
+        "description": "Rewrite hero and feature sections.",
+        "status": "Review",
+        "tags": ["Design"]
+      }
+    ]
+  }
+}

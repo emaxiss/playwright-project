@@ -1,12 +1,17 @@
 {
   "name": "playwright-project",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Playwright test suite and the Kanban application it exercises",
+  "type": "module",
   "scripts": {
-    "test:report": "playwright show-report",
+    "app:dev": "vite --config app/vite.config.ts",
+    "app:build": "vite build --config app/vite.config.ts",
+    "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "test": "playwright test"
+    "test:report": "playwright show-report",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
   "author": "",
@@ -14,7 +19,16 @@
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@types/node": "^22.10.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
     "dotenv": "^16.4.7",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.0"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   }
 }
