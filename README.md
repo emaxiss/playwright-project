@@ -1,18 +1,24 @@
-# Plawright Project
+# Playwright Project
 
 ## About
 
-This project demonstrates a Playwright-driven test suite for testing a Kanban board web application. The Framework designed using page object model, utilizing Playwright fixtures to enable modular and reusable setups (dynamic injection of page objects and browser context during test execution). Test suite employs a data-driven approach to minimize code duplication and maximize scalability, making it easy to add or update test cases dynamically. To optimize the test execution time, authentication state is stored and reused across multiple tests.
+A Playwright test suite for a Kanban board web application.
+
+The framework uses the page object model, with Playwright fixtures injecting page
+objects into each test so setup stays modular and reusable. Page objects are
+composed from smaller component classes (header, nav menu, task card), each scoped
+to its own container locator. Board tests are data-driven to keep new cases cheap
+to add. Authentication runs once in a setup project and the resulting storage state
+is reused across the suite to cut execution time.
 
 ## Setup
 
-If you only want to see the run results - you can download playwright-report file from the last workflow summary page on "Actions" tab
-
-Otherwise proceed with local run
+To see results without running anything locally, download the `playwright-report`
+artifact from the latest run on the "Actions" tab.
 
 ### Prerequisites
 
-- Install Node.js (v20 or higher recommended)
+- Node.js v20 or higher
 
 ```sh
 # clone the repository
@@ -24,6 +30,7 @@ npm install
 # install playwright browsers
 npx playwright install
 ```
+
 ## Test run
 
 #### To run tests
