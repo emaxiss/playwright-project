@@ -23,7 +23,7 @@ test.describe("Login", () => {
     const invalidUsername = "invalid_username";
 
     await loginPage.login(invalidUsername, adminUser.password);
-    await expect(loginPage.errorMessage).toBeInViewport();
+    await expect(loginPage.errorMessage).toBeVisible();
   });
 
   test("should not allow login with invalid password", async ({
@@ -32,7 +32,7 @@ test.describe("Login", () => {
     const invalidPassword = "invalid_password";
 
     await loginPage.login(adminUser.username, invalidPassword);
-    await expect(loginPage.errorMessage).toBeInViewport();
+    await expect(loginPage.errorMessage).toBeVisible();
   });
 });
 
@@ -41,6 +41,6 @@ test.describe("Logout", () => {
     await kanbanPage.open();
     await kanbanPage.logout();
     await loginPage.page.waitForURL(loginPage.url);
-    await expect(loginPage.signInButton).toBeInViewport();
+    await expect(loginPage.signInButton).toBeVisible();
   });
 });
