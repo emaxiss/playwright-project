@@ -6,7 +6,7 @@ import LoginPage from "./pages/login.page";
 export type PageFixtures = {
   kanbanPage: KanbanPage;
   loginPage: LoginPage;
-  seedBoard: (tasks: SeededTask[]) => Promise<void>;
+  seedBoard: (tasks: SeededTask[], board?: SeededBoard) => Promise<void>;
   failBoardRequest: (status?: number) => Promise<void>;
 };
 
@@ -14,6 +14,12 @@ export type WorkerFixtures = {
   /** Restores the API seed once per worker so a rerun starts from known data. */
   resetApi: void;
 };
+
+export interface SeededBoard {
+  id?: string;
+  name?: string;
+  description?: string;
+}
 
 export interface SeededTask {
   id: string;
@@ -49,13 +55,19 @@ export const test = base.extend<PageFixtures, WorkerFixtures>({
    * applied to that set, so a create, move or delete stays visible on reload.
    */
   seedBoard: async ({ page }, use) => {
-    await use(async (tasks: SeededTask[]) => {
+    await use(async (tasks: SeededTask[], board?: SeededBoard) => {
       const state = tasks.map((task) => ({
         description: "",
         tags: [],
         assignee: "Ada Cole",
         ...task,
       }));
+      const meta = {
+        id: board?.id ?? "web",
+        name: board?.name ?? "Web Application",
+        description:
+          board?.description ?? "Main web application development board",
+      };
 
       await page.route("**/api/boards/**", async (route: Route) => {
         const request = route.request();
@@ -91,12 +103,7 @@ export const test = base.extend<PageFixtures, WorkerFixtures>({
             return route.fulfill({
               status: 200,
               contentType: "application/json",
-              body: JSON.stringify({
-                id: "web",
-                name: "Web Application",
-                description: "Main web application development board",
-                tasks: state,
-              }),
+              body: JSON.stringify({ ...meta, tasks: state }),
             });
         }
       });
@@ -106,7 +113,7 @@ export const test = base.extend<PageFixtures, WorkerFixtures>({
   /** Forces the board request to fail so error handling can be asserted. */
   failBoardRequest: async ({ page }, use) => {
     await use(async (status = 500) => {
-      await page.route("**/api/boards/*", (route: Route) =>
+      await page.route("**/api/boards/**", (route: Route) =>
         route.fulfill({
           status,
           contentType: "application/json",
