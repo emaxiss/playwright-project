@@ -16,4 +16,8 @@ export default class NavMenu {
       name: "Marketing Campaign",
     });
   }
+
+  activeProject(): Locator {
+    return this.element.locator("button[aria-current='true']");
+  }
 }

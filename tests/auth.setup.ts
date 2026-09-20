@@ -1,13 +1,19 @@
 import { adminUser } from "../data/test.user";
-import { test, expect } from "../page-objects/pageFixture";
+import { expect, test } from "../page-objects/pageFixture";
 
-const authFilePath = ".auth/user.json";
+const authFile = ".auth/user.json";
 
-// set storage state
-test("Authenticate with UI", async ({ loginPage, kanbanPage }) => {
+/**
+ * Signs in once and stores the session so the rest of the suite starts
+ * authenticated. The session lives in localStorage, which storageState
+ * captures alongside cookies.
+ */
+test("authenticate", async ({ loginPage, kanbanPage }) => {
   await loginPage.open();
   await loginPage.login(adminUser.username, adminUser.password);
-  await kanbanPage.page.waitForURL(kanbanPage.url);
-  await expect(kanbanPage.header.boardName).toBeVisible();
-  await kanbanPage.page.context().storageState({ path: authFilePath });
+
+  await expect(kanbanPage.header.logoutButton).toBeVisible();
+  await expect(kanbanPage.boardName).toHaveText("Web Application");
+
+  await loginPage.page.context().storageState({ path: authFile });
 });
