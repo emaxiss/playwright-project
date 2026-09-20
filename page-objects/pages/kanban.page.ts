@@ -31,7 +31,8 @@ export default class KanbanPage extends BasePage {
     name: "New Task",
   });
   readonly confirmDialog: Locator = this.page.getByRole("alertdialog");
-  readonly toast: Locator = this.page.locator(".toast");
+  /** The most recent toast. Several can stack, so actions target the newest. */
+  readonly toast: Locator = this.page.locator(".toast").last();
 
   getColumnByStatus(status: ColumnStatus): Column {
     return new Column(this.page.getByRole("region", { name: status }));

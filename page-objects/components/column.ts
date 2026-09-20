@@ -15,7 +15,9 @@ export default class Column {
   }
 
   getTaskByTitle(title: string): TaskCard {
-    return new TaskCard(this.element.getByRole("article", { name: title }));
+    return new TaskCard(
+      this.element.getByRole("article", { name: title, exact: true }),
+    );
   }
 
   async taskTitles(): Promise<string[]> {
