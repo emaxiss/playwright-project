@@ -104,4 +104,46 @@ test.describe("Task management", () => {
     await expect(todo.getTaskByTitle("Existing task").element).toBeVisible();
     await expect(todo.cards).toHaveCount(2);
   });
+
+  test("keeps undo scoped to the board the task was deleted from", async ({
+    kanbanPage,
+    page,
+  }) => {
+    const todo = kanbanPage.getColumnByStatus(ColumnStatus.TO_DO);
+    await todo.getTaskByTitle("Existing task").requestDelete();
+    await kanbanPage.confirmDelete();
+    await expect(todo.cards).toHaveCount(1);
+
+    // record where the undo write lands once the user has moved on
+    const restores: string[] = [];
+    page.on("request", (request) => {
+      if (request.method() === "POST" && request.url().includes("/api/boards/"))
+        restores.push(new URL(request.url()).pathname);
+    });
+
+    await kanbanPage.openMobileAppBoard();
+    await kanbanPage.undoLastAction();
+    await expect(kanbanPage.toast).toBeHidden();
+
+    // the restore targets the board the task came from, not the visible one
+    expect(restores).toEqual(["/api/boards/web"]);
+  });
+
+  test("shows only the newest toast action after repeated deletes", async ({
+    kanbanPage,
+  }) => {
+    const todo = kanbanPage.getColumnByStatus(ColumnStatus.TO_DO);
+
+    await todo.getTaskByTitle("Existing task").requestDelete();
+    await kanbanPage.confirmDelete();
+    await todo.getTaskByTitle("Second task").requestDelete();
+    await kanbanPage.confirmDelete();
+
+    await expect(todo.cards).toHaveCount(0);
+    await expect(kanbanPage.toast).toContainText('Deleted "Second task"');
+
+    await kanbanPage.undoLastAction();
+
+    await expect(todo.getTaskByTitle("Second task").element).toBeVisible();
+  });
 });
