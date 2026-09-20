@@ -38,3 +38,23 @@ test.describe("Error handling", () => {
     }
   });
 });
+
+test.describe("Session expiry", () => {
+  test("returns to sign in when the session is rejected", async ({
+    kanbanPage,
+    loginPage,
+    page,
+  }) => {
+    await page.route("**/api/boards/**", (route) =>
+      route.fulfill({
+        status: 401,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "Not authenticated" }),
+      }),
+    );
+    await kanbanPage.open();
+
+    await expect(loginPage.signInButton).toBeVisible();
+    await expect(kanbanPage.newTaskButton).toBeHidden();
+  });
+});
