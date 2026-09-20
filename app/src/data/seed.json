@@ -9,35 +9,64 @@
         "title": "Implement user authentication",
         "description": "Add login and registration flows with session handling.",
         "status": "To Do",
-        "tags": ["Feature", "High Priority"]
+        "tags": ["Feature", "High Priority"],
+        "assignee": "Ada Cole"
       },
       {
         "id": "web-2",
         "title": "Fix navigation bug",
         "description": "Sidebar collapses unexpectedly on route change.",
         "status": "To Do",
-        "tags": ["Bug"]
+        "tags": ["Bug"],
+        "assignee": "Ravi Menon"
       },
       {
         "id": "web-3",
         "title": "Design system updates",
         "description": "Align spacing tokens across shared components.",
         "status": "In Progress",
-        "tags": ["Design"]
+        "tags": ["Design"],
+        "assignee": "Ada Cole"
       },
       {
         "id": "web-4",
         "title": "API integration",
         "description": "Wire the board view to the tasks endpoint.",
         "status": "Review",
-        "tags": ["Feature"]
+        "tags": ["Feature"],
+        "assignee": "Jo Park"
       },
       {
         "id": "web-5",
         "title": "Update documentation",
         "description": "Document the release process for contributors.",
         "status": "Done",
-        "tags": ["Feature"]
+        "tags": ["Feature"],
+        "assignee": "Ravi Menon"
+      },
+      {
+        "id": "web-6",
+        "title": "Rate limit the public API",
+        "description": "Throttle requests per client key and return a clear error payload.",
+        "status": "To Do",
+        "tags": ["Feature", "High Priority"],
+        "assignee": "Jo Park"
+      },
+      {
+        "id": "web-7",
+        "title": "Flaky checkout test",
+        "description": "Intermittent timeout on the payment step in CI only.",
+        "status": "In Progress",
+        "tags": ["Bug"],
+        "assignee": "Ravi Menon"
+      },
+      {
+        "id": "web-8",
+        "title": "Empty state illustrations",
+        "description": "Add artwork for boards with no tasks yet.",
+        "status": "Review",
+        "tags": ["Design"],
+        "assignee": "Lena Fischer"
       }
     ]
   },
@@ -51,21 +80,40 @@
         "title": "Push notification system",
         "description": "Deliver task assignment notifications to devices.",
         "status": "To Do",
-        "tags": ["Feature"]
+        "tags": ["Feature"],
+        "assignee": "Jo Park"
       },
       {
         "id": "mobile-2",
         "title": "Offline mode",
         "description": "Cache the active board for offline viewing.",
         "status": "In Progress",
-        "tags": ["Feature", "High Priority"]
+        "tags": ["Feature", "High Priority"],
+        "assignee": "Ada Cole"
       },
       {
         "id": "mobile-3",
         "title": "App icon design",
         "description": "Produce icon variants for both platforms.",
         "status": "Done",
-        "tags": ["Design"]
+        "tags": ["Design"],
+        "assignee": "Lena Fischer"
+      },
+      {
+        "id": "mobile-4",
+        "title": "Biometric unlock",
+        "description": "Support Face ID and fingerprint on the lock screen.",
+        "status": "Review",
+        "tags": ["Feature", "High Priority"],
+        "assignee": "Ravi Menon"
+      },
+      {
+        "id": "mobile-5",
+        "title": "Crash on cold start",
+        "description": "Android 14 devices crash when the cache is empty.",
+        "status": "To Do",
+        "tags": ["Bug", "High Priority"],
+        "assignee": "Jo Park"
       }
     ]
   },
@@ -79,14 +127,32 @@
         "title": "Q2 campaign brief",
         "description": "Draft the brief for the spring campaign.",
         "status": "To Do",
-        "tags": ["Feature"]
+        "tags": ["Feature"],
+        "assignee": "Lena Fischer"
       },
       {
         "id": "marketing-2",
         "title": "Landing page copy",
         "description": "Rewrite hero and feature sections.",
         "status": "Review",
-        "tags": ["Design"]
+        "tags": ["Design"],
+        "assignee": "Jo Park"
+      },
+      {
+        "id": "marketing-3",
+        "title": "Case study layout",
+        "description": "Template for customer stories on the site.",
+        "status": "In Progress",
+        "tags": ["Design"],
+        "assignee": "Lena Fischer"
+      },
+      {
+        "id": "marketing-4",
+        "title": "Publish release notes",
+        "description": "Summarise the spring release for the newsletter.",
+        "status": "Done",
+        "tags": ["Feature"],
+        "assignee": "Ada Cole"
       }
     ]
   }
