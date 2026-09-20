@@ -11,7 +11,7 @@ export const COLUMN_DOTS: Record<ColumnStatus, string> = {
   "To Do": "#a89c92",
   "In Progress": "#bd7149",
   Review: "#96682a",
-  Done: "#3f7d58",
+  Done: "#356a4a",
 };
 
 export type Tag = "Feature" | "Bug" | "Design" | "High Priority";

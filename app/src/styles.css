@@ -28,11 +28,11 @@
   --accent-hover: var(--clay-700);
   --accent-soft: var(--clay-100);
 
-  --success: #3f7d58;
+  --success: #356a4a;
   --success-soft: #e3f0e8;
   --danger: #a33a32;
   --danger-soft: #f8e5e3;
-  --warning: #96682a;
+  --warning: #7f571f;
   --warning-soft: #fbeed6;
 
   --shadow-sm: 0 1px 2px rgba(87, 49, 36, 0.06);
@@ -613,7 +613,7 @@ textarea {
 .column-empty {
   padding: 22px 10px;
   text-align: center;
-  color: var(--ink-300);
+  color: var(--ink-500);
   font-size: 13px;
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius-sm);
