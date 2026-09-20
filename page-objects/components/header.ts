@@ -5,9 +5,9 @@ export default class Header {
   readonly boardName: Locator;
   readonly boardDescription: Locator;
 
-  constructor(public readonly elemment: Locator) {
-    this.logoutButton = this.elemment.getByRole("button", { name: "Logout" });
-    this.boardName = this.elemment.getByRole("heading", { level: 1 });
-    this.boardDescription = this.elemment.locator("header p");
+  constructor(public readonly element: Locator) {
+    this.logoutButton = this.element.getByRole("button", { name: "Logout" });
+    this.boardName = this.element.getByRole("heading", { level: 1 });
+    this.boardDescription = this.element.locator("header p");
   }
 }

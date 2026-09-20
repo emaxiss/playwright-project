@@ -59,7 +59,7 @@ test.describe("Kanban Board Tests", () => {
         if (project === "mobile") {
           await kanbanPage.openMobileAppBoard();
         }
-        // verify the task in correct colum
+        // verify the task is in the correct column
         const column = kanbanPage.getColumnByStatus(columnStatus);
         const task = column.getTaskByTitle(taskTitle);
         await expect(task.element).toBeVisible();
