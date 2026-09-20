@@ -6,9 +6,6 @@ on:
 jobs:
   playwright-tests:
     runs-on: ubuntu-latest
-    env: 
-      ADMIN_USER: ${{ secrets.ADMIN_USER }} 
-      ADMIN_USER_PASSWORD: ${{ secrets.ADMIN_USER_PASSWORD }} 
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install-dependencies
@@ -17,12 +14,22 @@ jobs:
         uses: actions/cache@v4
         id: playwright-cache
         with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-Playwright-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
 
-      - name: Install dependencies
+      - name: Install Playwright Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
+
+      - name: Install System Dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Check Formatting
+        run: npm run format:check
 
       - name: Run Tests
         run: npm run test

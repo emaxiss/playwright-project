@@ -1,4 +1,4 @@
-import { type Page } from "@playwright/test";
+import { type Page, type Locator } from "@playwright/test";
 import Header from "../components/header";
 import NavMenu from "../components/nav-menu";
 
@@ -6,18 +6,22 @@ export abstract class BasePage {
   abstract url: string;
   readonly header: Header;
   readonly navMenu: NavMenu;
+  readonly boardName: Locator;
+  readonly boardDescription: Locator;
+  readonly errorBanner: Locator;
 
   constructor(readonly page: Page) {
-    this.header = new Header(this.page.locator("header"));
-    this.navMenu = new NavMenu(this.page.locator("nav"));
+    this.header = new Header(this.page.locator(".topbar"));
+    this.navMenu = new NavMenu(
+      this.page.getByRole("navigation", { name: "Boards" }),
+    );
+    this.boardName = this.page.getByRole("heading", { level: 1 });
+    this.boardDescription = this.page.locator(".board-head p");
+    this.errorBanner = this.page.locator(".banner-error");
   }
 
   async open(url?: string): Promise<void> {
-    const targetUrl = url || this.url;
-    if (!targetUrl) {
-      throw new Error("URL is not defined for this page.");
-    }
-    await this.page.goto(targetUrl, { waitUntil: "domcontentloaded" });
+    await this.page.goto(url ?? this.url, { waitUntil: "domcontentloaded" });
   }
 
   async logout(): Promise<void> {
