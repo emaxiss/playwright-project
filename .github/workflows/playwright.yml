@@ -7,8 +7,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  playwright-tests:
+  checks:
+    name: Typecheck and format
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install-dependencies
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Check Formatting
+        run: npm run format:check
+
+  test:
+    name: Tests (shard ${{ matrix.shard }} of 3)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install-dependencies
@@ -28,18 +46,38 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps
 
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Check Formatting
-        run: npm run format:check
-
       - name: Run Tests
-        run: npm run test
+        run: npx playwright test --shard=${{ matrix.shard }}/3
+
+      - name: Upload Blob Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-${{ matrix.shard }}
+          path: blob-report/
+          retention-days: 3
+
+  report:
+    name: Merge reports
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install-dependencies
+
+      - name: Download Blob Reports
+        uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: Merge into HTML Report
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: Upload Report to Artifacts
         uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: playwright-report
           path: playwright-report/
