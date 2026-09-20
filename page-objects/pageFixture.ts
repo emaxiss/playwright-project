@@ -1,11 +1,18 @@
 import { test as base } from "@playwright/test";
 import type { Page, Route } from "@playwright/test";
 import KanbanPage from "./pages/kanban.page";
+import LoginPage from "./pages/login.page";
 
 export type PageFixtures = {
   kanbanPage: KanbanPage;
+  loginPage: LoginPage;
   seedBoard: (tasks: SeededTask[]) => Promise<void>;
   failBoardRequest: (status?: number) => Promise<void>;
+};
+
+export type WorkerFixtures = {
+  /** Restores the API seed once per worker so a rerun starts from known data. */
+  resetApi: void;
 };
 
 export interface SeededTask {
@@ -14,6 +21,7 @@ export interface SeededTask {
   description?: string;
   status: string;
   tags?: string[];
+  assignee?: string;
 }
 
 function createPageFixture<T>(PageObject: new (page: Page) => T) {
@@ -22,8 +30,18 @@ function createPageFixture<T>(PageObject: new (page: Page) => T) {
   };
 }
 
-export const test = base.extend<PageFixtures>({
+export const test = base.extend<PageFixtures, WorkerFixtures>({
+  resetApi: [
+    async ({}, use, workerInfo) => {
+      const base = workerInfo.project.use.baseURL ?? "http://localhost:5173";
+      await fetch(`${base}/api/reset`, { method: "POST" }).catch(() => {});
+      await use();
+    },
+    { scope: "worker", auto: true },
+  ],
+
   kanbanPage: createPageFixture(KanbanPage),
+  loginPage: createPageFixture(LoginPage),
 
   /**
    * Serves the board from an in-memory set of tasks so a test does not depend
@@ -35,6 +53,7 @@ export const test = base.extend<PageFixtures>({
       const state = tasks.map((task) => ({
         description: "",
         tags: [],
+        assignee: "Ada Cole",
         ...task,
       }));
 
@@ -63,6 +82,7 @@ export const test = base.extend<PageFixtures>({
               id: `seeded-${state.length + 1}`,
               description: "",
               tags: [],
+              assignee: "Ada Cole",
               ...input,
             });
             return route.fulfill({ status: 201, body: "{}" });
