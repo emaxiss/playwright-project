@@ -36,7 +36,7 @@ force failures or seed a known board per test.
 
 ### Prerequisites
 
-- Node.js v20 or higher
+- Node.js v22 or higher
 
 ```sh
 # clone the repository
