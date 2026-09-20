@@ -52,7 +52,11 @@ export function NewTaskForm({ onCreate }: NewTaskFormProps) {
   }
 
   return (
-    <form className="new-task-form" onSubmit={handleSubmit} aria-label="New task">
+    <form
+      className="new-task-form"
+      onSubmit={handleSubmit}
+      aria-label="New task"
+    >
       <label htmlFor="task-title">Title</label>
       <input
         id="task-title"
